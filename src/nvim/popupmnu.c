@@ -280,6 +280,8 @@ void pum_redraw(void)
   int attr_scroll = highlight_attr[HLF_PSB];
   int attr_thumb = highlight_attr[HLF_PST];
   int attr_kind = highlight_attr[HLF_PKD];
+  int attr_kind_func = highlight_attr[HLF_FUN];
+  int attr_kind_var = highlight_attr[HLF_PVA];
   int attr;
   int i;
   int idx;
@@ -310,14 +312,6 @@ void pum_redraw(void)
     idx = i + pum_first;
     attr = (idx == pum_selected) ? attr_select : attr_norm;
 
-    // prepend a space if there is room
-    if (curwin->w_p_rl) {
-      if (pum_col < curwin->w_wincol + curwin->w_width - 1) {
-        screen_putchar(' ', row, pum_col + 1, attr_kind);
-      }
-    } else if (pum_col > 0) {
-      screen_putchar(' ', row, pum_col - 1, attr_kind);
-    }
 
     // Display each entry, use two spaces for a Tab.
     // Do this 3 times: For the main text, kind and extra info
@@ -332,6 +326,20 @@ void pum_redraw(void)
         case 1:
           p = pum_array[idx].pum_kind;
           attr = attr_kind;
+          if (strncmp((char *)p, "f", 1) == 0) {
+              attr = attr_kind_func;
+          } else if (strncmp((char *)p, "v", 1) == 0) {
+              attr = attr_kind_var;
+          }
+
+          // prepend a space if there is room
+          if (curwin->w_p_rl) {
+            if (pum_col < curwin->w_wincol + curwin->w_width - 1) {
+              screen_putchar(' ', row, pum_col + 1, attr);
+            }
+          } else if (pum_col > 0) {
+            screen_putchar(' ', row, pum_col - 1, attr);
+          }
           break;
 
         case 2:

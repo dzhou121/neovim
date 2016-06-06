@@ -481,6 +481,8 @@ typedef enum {
   , HLF_PSB         /* popup menu scrollbar */
   , HLF_PST         /* popup menu scrollbar thumb */
   , HLF_PKD         /* popup menu kind icon */
+  , HLF_FUN         /* popup menu kind func icon */
+  , HLF_PVA         /* popup menu kind var icon */
   , HLF_TP          /* tabpage line */
   , HLF_TPS         /* tabpage line selected */
   , HLF_TPF         /* tabpage line filler */
@@ -495,7 +497,7 @@ typedef enum {
 #define HL_FLAGS {'8', '~', 'z', 'Z', '@', 'd', 'e', 'i', 'l', 'm', 'M', 'n', \
                   'N', 'r', 's', 'S', 'c', 't', 'v', 'V', 'w', 'W', 'f', 'F', \
                   'A', 'C', 'D', 'T', '-', '>', 'B', 'P', 'R', 'L', '+', '=', \
-                  'x', 'X', 'E', '*', '#', '_', '!', '.', 'o'}
+                  'x', 'X', 'E', 'G', 'g', '*', '#', '_', '!', '.', 'o'}
 
 EXTERN int highlight_attr[HLF_COUNT];       /* Highl. attr for each context. */
 EXTERN int highlight_user[9];                   /* User[1-9] attributes */
