@@ -191,14 +191,14 @@ redo:
       }
     }
   }
-  pum_base_width = max_width;
+  pum_base_width = max_width + 1;
   pum_kind_width = 1;
 
   // Calculate column
   if (curwin->w_p_rl) {
-    col = curwin->w_wincol + curwin->w_width - curwin->w_wcol - 1 - 2;
+    col = curwin->w_wincol + curwin->w_width - curwin->w_wcol - 1 - 3;
   } else {
-    col = curwin->w_wincol + curwin->w_wcol - 2;
+    col = curwin->w_wincol + curwin->w_wcol - 3;
   }
 
   // if there are more items than room we need a scrollbar
@@ -337,11 +337,12 @@ void pum_redraw(void)
         case 2:
           p = pum_array[idx].pum_text;
           attr = (idx == pum_selected) ? attr_select : attr_norm;
+          screen_putchar(' ', row, col, attr);
+          col += 1;
           break;
 
         case 3:
           p = pum_array[idx].pum_extra;
-          attr = (idx == pum_selected) ? attr_select : attr_norm;
           break;
       }
 
