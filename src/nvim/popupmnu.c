@@ -192,13 +192,13 @@ redo:
     }
   }
   pum_base_width = max_width;
-  pum_kind_width = kind_width;
+  pum_kind_width = 1;
 
   // Calculate column
   if (curwin->w_p_rl) {
-    col = curwin->w_wincol + curwin->w_width - curwin->w_wcol - 1;
+    col = curwin->w_wincol + curwin->w_width - curwin->w_wcol - 1 - 2;
   } else {
-    col = curwin->w_wincol + curwin->w_wcol;
+    col = curwin->w_wincol + curwin->w_wcol - 2;
   }
 
   // if there are more items than room we need a scrollbar
@@ -279,6 +279,7 @@ void pum_redraw(void)
   int attr_select = highlight_attr[HLF_PSI];
   int attr_scroll = highlight_attr[HLF_PSB];
   int attr_thumb = highlight_attr[HLF_PST];
+  int attr_kind = highlight_attr[HLF_PKD];
   int attr;
   int i;
   int idx;
@@ -312,10 +313,10 @@ void pum_redraw(void)
     // prepend a space if there is room
     if (curwin->w_p_rl) {
       if (pum_col < curwin->w_wincol + curwin->w_width - 1) {
-        screen_putchar(' ', row, pum_col + 1, attr);
+        screen_putchar(' ', row, pum_col + 1, attr_kind);
       }
     } else if (pum_col > 0) {
-      screen_putchar(' ', row, pum_col - 1, attr);
+      screen_putchar(' ', row, pum_col - 1, attr_kind);
     }
 
     // Display each entry, use two spaces for a Tab.
@@ -329,15 +330,18 @@ void pum_redraw(void)
 
       switch (round) {
         case 1:
-          p = pum_array[idx].pum_text;
+          p = pum_array[idx].pum_kind;
+          attr = attr_kind;
           break;
 
         case 2:
-          p = pum_array[idx].pum_kind;
+          p = pum_array[idx].pum_text;
+          attr = (idx == pum_selected) ? attr_select : attr_norm;
           break;
 
         case 3:
           p = pum_array[idx].pum_extra;
+          attr = (idx == pum_selected) ? attr_select : attr_norm;
           break;
       }
 
@@ -410,7 +414,7 @@ void pum_redraw(void)
       }
 
       if (round > 1) {
-        n = pum_kind_width + 1;
+        n = pum_base_width + 1;
       } else {
         n = 1;
       }
@@ -422,20 +426,20 @@ void pum_redraw(void)
           || ((round == 1)
               && (pum_array[idx].pum_kind == NULL)
               && (pum_array[idx].pum_extra == NULL))
-          || (pum_base_width + n >= pum_width)) {
+          || (pum_kind_width + n >= pum_width)) {
         break;
       }
 
       if (curwin->w_p_rl) {
-        screen_fill(row, row + 1, pum_col - pum_base_width - n + 1,
+        screen_fill(row, row + 1, pum_col - pum_kind_width - n + 1,
                     col + 1, ' ', ' ', attr);
-        col = pum_col - pum_base_width - n + 1;
+        col = pum_col - pum_kind_width - n + 1;
       } else {
-        screen_fill(row, row + 1, col, pum_col + pum_base_width + n,
+        screen_fill(row, row + 1, col, pum_col + pum_kind_width + n,
                     ' ', ' ', attr);
-        col = pum_col + pum_base_width + n;
+        col = pum_col + pum_kind_width + n;
       }
-      totwidth = pum_base_width + n;
+      totwidth = pum_kind_width + n;
     }
 
     if (curwin->w_p_rl) {

@@ -244,7 +244,7 @@ typedef struct vimoption {
   "v:Visual,w:WarningMsg,W:WildMenu,f:Folded,F:FoldColumn," \
   "A:DiffAdd,C:DiffChange,D:DiffDelete,T:DiffText,>:SignColumn,-:Conceal," \
   "B:SpellBad,P:SpellCap,R:SpellRare,L:SpellLocal,+:Pmenu,=:PmenuSel," \
-  "x:PmenuSbar,X:PmenuThumb,*:TabLine,#:TabLineSel,_:TabLineFill," \
+  "x:PmenuSbar,X:PmenuThumb,E:PmenuKind,*:TabLine,#:TabLineSel,_:TabLineFill," \
   "!:CursorColumn,.:CursorLine,o:ColorColumn"
 
 /*
